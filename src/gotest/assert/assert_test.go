@@ -29,6 +29,12 @@ func TestAssertTrueFailed(test *testing.T) {
 	}
 }
 
+func TestAssertTrueAsUser(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.IsTrue(true)
+}
+
 func TestAssertFalse(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
@@ -49,6 +55,12 @@ func TestAssertFalseFailed(test *testing.T) {
 	}
 }
 
+func TestAssertFalseAsUser(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.IsFalse(false)
+}
+
 func TestAssertEqual(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
@@ -67,6 +79,12 @@ func TestAssertEqualFailed(test *testing.T) {
 	if !assert.Test.Failed() {
 		test.FailNow()
 	}
+}
+
+func TestAssertEqualAsUser(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.That("hello").IsEqualTo("hello")
 }
 
 func (test *MockTest) Fail() {
