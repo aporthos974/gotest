@@ -6,9 +6,9 @@ type Assert struct {
 	Test testing.TB
 }
 
-type AssertExpected struct {
-	expected string
-	Test     testing.TB
+type AssertActual struct {
+	actual interface{}
+	Test   testing.TB
 }
 
 func (assert *Assert) IsTrue(actual bool) {
@@ -23,18 +23,30 @@ func (assert *Assert) IsFalse(actual bool) {
 	}
 }
 
-func (assertExpected *AssertExpected) IsEqualTo(actual string) {
-	if assertExpected.expected != actual {
-		assertExpected.Test.Fail()
+func (assertActual *AssertActual) IsEqualTo(expected string) {
+	if assertActual.actual != expected {
+		assertActual.Test.Fail()
 	}
 }
 
-func (assertExpected *AssertExpected) IsNotEqualTo(actual string) {
-	if assertExpected.expected == actual {
-		assertExpected.Test.Fail()
+func (assertActual *AssertActual) Contains(expected string) {
+	found := false
+	for _, value := range assertActual.actual.([]string) {
+		if value == expected {
+			found = true
+		}
+	}
+	if !found {
+		assertActual.Test.Fail()
 	}
 }
 
-func (assert *Assert) That(expected string) *AssertExpected {
-	return &AssertExpected{Test: assert.Test, expected: expected}
+func (assertActual *AssertActual) IsNotEqualTo(expected string) {
+	if assertActual.actual == expected {
+		assertActual.Test.Fail()
+	}
+}
+
+func (assert *Assert) That(actual interface{}) *AssertActual {
+	return &AssertActual{Test: assert.Test, actual: actual}
 }

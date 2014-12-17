@@ -113,6 +113,32 @@ func TestAssertNotEqualAsUser(test *testing.T) {
 	assert.That("hello").IsNotEqualTo("different hello")
 }
 
+func TestAssertContains(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]string{"hello", "world"}).Contains("world")
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertContainsIsFailed(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]string{"hello", "world"}).Contains("world!")
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertContainsAsUser(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.That([]string{"hello", "world"}).Contains("world")
+}
+
 func (test *MockTest) Fail() {
 	test.failed = true
 }
