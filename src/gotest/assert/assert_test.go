@@ -7,6 +7,7 @@ import (
 type MockTest struct {
 	testing.TB
 	failed bool
+	wrong  bool
 }
 
 func TestAssertTrue(test *testing.T) {
@@ -123,6 +124,16 @@ func TestAssertContains(test *testing.T) {
 	}
 }
 
+func TestAssertContainsInteger(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]int{3, 7}).Contains(7)
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
 func TestAssertContainsIsFailed(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
@@ -130,6 +141,17 @@ func TestAssertContainsIsFailed(test *testing.T) {
 
 	if !assert.Test.Failed() {
 		test.FailNow()
+	}
+}
+
+func TestAssertContainsIsWrongBecauseOfTypeOfActual(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That(3).Contains("world!")
+
+	testResult := assert.Test.(*MockTest)
+	if !testResult.Wrong() {
+		testResult.FailNow()
 	}
 }
 
@@ -143,6 +165,14 @@ func (test *MockTest) Fail() {
 	test.failed = true
 }
 
+func (test *MockTest) Errorf(format string, args ...interface{}) {
+	test.wrong = true
+}
+
 func (test *MockTest) Failed() bool {
 	return test.failed
+}
+
+func (test *MockTest) Wrong() bool {
+	return test.wrong
 }
