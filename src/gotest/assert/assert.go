@@ -29,6 +29,12 @@ func (assertExpected *AssertExpected) IsEqualTo(actual string) {
 	}
 }
 
+func (assertExpected *AssertExpected) IsNotEqualTo(actual string) {
+	if assertExpected.expected == actual {
+		assertExpected.Test.Fail()
+	}
+}
+
 func (assert *Assert) That(expected string) *AssertExpected {
 	return &AssertExpected{Test: assert.Test, expected: expected}
 }

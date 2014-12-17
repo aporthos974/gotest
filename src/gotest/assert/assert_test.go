@@ -87,6 +87,32 @@ func TestAssertEqualAsUser(test *testing.T) {
 	assert.That("hello").IsEqualTo("hello")
 }
 
+func TestAssertNotEqual(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That("Hello").IsNotEqualTo("different Hello")
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertNotEqualFailed(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That("Hello").IsNotEqualTo("Hello")
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertNotEqualAsUser(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.That("hello").IsNotEqualTo("different hello")
+}
+
 func (test *MockTest) Fail() {
 	test.failed = true
 }
