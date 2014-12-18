@@ -54,6 +54,17 @@ func (assertActual *AssertActual) Contains(expected interface{}) {
 	}
 }
 
+func (assertActual *AssertActual) HasSize(expected interface{}) {
+	if reflect.TypeOf(assertActual.actual).Kind() == reflect.Slice {
+		actual := reflect.ValueOf(assertActual.actual)
+		if actual.Len() != expected {
+			assertActual.Test.Fail()
+		}
+	} else {
+		assertActual.Test.Errorf("type of actual is incompatible with the expected : %s", reflect.TypeOf(assertActual.actual).String())
+	}
+}
+
 func find(elements reflect.Value, elementToFind interface{}) interface{} {
 	for i := 0; i < elements.Len(); i++ {
 		value := elements.Index(i).Interface()

@@ -122,3 +122,34 @@ func TestAssertContainsIsWrongBecauseOfTypeOfActual(test *testing.T) {
 		testResult.FailNow()
 	}
 }
+
+func TestAssertSize(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]string{"hello", "world"}).HasSize(2)
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertSizeIsFailed(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]string{"hello", "world"}).HasSize(5)
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertSizeIsWrongBecauseOfTypeOfActual(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That("hello").HasSize(1)
+
+	testResult := assert.Test.(*MockTest)
+	if !testResult.Wrong() {
+		test.FailNow()
+	}
+}

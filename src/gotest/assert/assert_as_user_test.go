@@ -31,3 +31,9 @@ func TestAssertContainsElement(test *testing.T) {
 
 	assert.That([]string{"hello", "world"}).Contains("world")
 }
+
+func TestAssertHasSize(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.That([]string{"hello", "world"}).HasSize(2)
+}
