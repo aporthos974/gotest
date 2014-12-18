@@ -1,14 +1,6 @@
 package assert
 
-import (
-	"testing"
-)
-
-type MockTest struct {
-	testing.TB
-	failed bool
-	wrong  bool
-}
+import "testing"
 
 func TestAssertTrue(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
@@ -28,12 +20,6 @@ func TestAssertTrueFailed(test *testing.T) {
 	if !assert.Test.Failed() {
 		test.FailNow()
 	}
-}
-
-func TestAssertTrueAsUser(test *testing.T) {
-	var assert Assert = Assert{test}
-
-	assert.That(true).IsTrue()
 }
 
 func TestAssertFalse(test *testing.T) {
@@ -56,12 +42,6 @@ func TestAssertFalseFailed(test *testing.T) {
 	}
 }
 
-func TestAssertFalseAsUser(test *testing.T) {
-	var assert Assert = Assert{test}
-
-	assert.That(false).IsFalse()
-}
-
 func TestAssertEqual(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
@@ -82,12 +62,6 @@ func TestAssertEqualFailed(test *testing.T) {
 	}
 }
 
-func TestAssertEqualAsUser(test *testing.T) {
-	var assert Assert = Assert{test}
-
-	assert.That("hello").IsEqualTo("hello")
-}
-
 func TestAssertNotEqual(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
@@ -106,12 +80,6 @@ func TestAssertNotEqualFailed(test *testing.T) {
 	if !assert.Test.Failed() {
 		test.FailNow()
 	}
-}
-
-func TestAssertNotEqualAsUser(test *testing.T) {
-	var assert Assert = Assert{test}
-
-	assert.That("hello").IsNotEqualTo("different hello")
 }
 
 func TestAssertContains(test *testing.T) {
@@ -153,26 +121,4 @@ func TestAssertContainsIsWrongBecauseOfTypeOfActual(test *testing.T) {
 	if !testResult.Wrong() {
 		testResult.FailNow()
 	}
-}
-
-func TestAssertContainsAsUser(test *testing.T) {
-	var assert Assert = Assert{test}
-
-	assert.That([]string{"hello", "world"}).Contains("world")
-}
-
-func (test *MockTest) Fail() {
-	test.failed = true
-}
-
-func (test *MockTest) Errorf(format string, args ...interface{}) {
-	test.wrong = true
-}
-
-func (test *MockTest) Failed() bool {
-	return test.failed
-}
-
-func (test *MockTest) Wrong() bool {
-	return test.wrong
 }
