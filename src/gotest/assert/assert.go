@@ -73,16 +73,6 @@ func (assertActual *AssertActual) IsNotNil() {
 	}
 }
 
-func find(elements reflect.Value, elementToFind interface{}) interface{} {
-	for i := 0; i < elements.Len(); i++ {
-		value := elements.Index(i).Interface()
-		if value == elementToFind {
-			return value
-		}
-	}
-	return nil
-}
-
 func (assertActual *AssertActual) verifySliceType() {
 	if reflect.TypeOf(assertActual.actual).Kind() != reflect.Slice {
 		assertActual.errorNow("type of actual is incompatible with the expected : %s", reflect.TypeOf(assertActual.actual).String())
@@ -92,4 +82,14 @@ func (assertActual *AssertActual) verifySliceType() {
 func (assertActual *AssertActual) errorNow(format string, param interface{}) {
 	assertActual.Test.Errorf(format, param)
 	runtime.Goexit()
+}
+
+func find(elements reflect.Value, elementToFind interface{}) interface{} {
+	for i := 0; i < elements.Len(); i++ {
+		value := elements.Index(i).Interface()
+		if value == elementToFind {
+			return value
+		}
+	}
+	return nil
 }
