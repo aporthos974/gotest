@@ -37,3 +37,15 @@ func TestAssertHasSize(test *testing.T) {
 
 	assert.That([]string{"hello", "world"}).HasSize(2)
 }
+
+func TestAssertIsNil(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.That(nil).IsNil()
+}
+
+func TestAssertIsNotNil(test *testing.T) {
+	var assert Assert = Assert{test}
+
+	assert.That("hello").IsNotNil()
+}

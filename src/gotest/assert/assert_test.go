@@ -153,3 +153,43 @@ func TestAssertSizeIsWrongBecauseOfTypeOfActual(test *testing.T) {
 		test.FailNow()
 	}
 }
+
+func TestAssertNil(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That(nil).IsNil()
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertNilIsFailed(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That("hello").IsNil()
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertNotNil(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That("hello").IsNotNil()
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertNotNilIsFailed(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That(nil).IsNotNil()
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}

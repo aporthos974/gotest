@@ -65,6 +65,18 @@ func (assertActual *AssertActual) HasSize(expected interface{}) {
 	}
 }
 
+func (assertActual *AssertActual) IsNil() {
+	if assertActual.actual != nil {
+		assertActual.Test.Fail()
+	}
+}
+
+func (assertActual *AssertActual) IsNotNil() {
+	if assertActual.actual == nil {
+		assertActual.Test.Fail()
+	}
+}
+
 func find(elements reflect.Value, elementToFind interface{}) interface{} {
 	for i := 0; i < elements.Len(); i++ {
 		value := elements.Index(i).Interface()
