@@ -2,6 +2,7 @@ package assert
 
 import (
 	"reflect"
+	"runtime"
 	"testing"
 )
 
@@ -43,25 +44,20 @@ func (assertActual *AssertActual) IsNotEqualTo(expected string) {
 }
 
 func (assertActual *AssertActual) Contains(expected interface{}) {
-	if reflect.TypeOf(assertActual.actual).Kind() == reflect.Slice {
-		actual := reflect.ValueOf(assertActual.actual)
+	assertActual.verifySliceType()
 
-		if find(actual, expected) == nil {
-			assertActual.Test.Fail()
-		}
-	} else {
-		assertActual.Test.Errorf("type of actual is incompatible with the expected : %s", reflect.TypeOf(assertActual.actual).String())
+	actual := reflect.ValueOf(assertActual.actual)
+	if find(actual, expected) == nil {
+		assertActual.Test.Fail()
 	}
 }
 
 func (assertActual *AssertActual) HasSize(expected interface{}) {
-	if reflect.TypeOf(assertActual.actual).Kind() == reflect.Slice {
-		actual := reflect.ValueOf(assertActual.actual)
-		if actual.Len() != expected {
-			assertActual.Test.Fail()
-		}
-	} else {
-		assertActual.Test.Errorf("type of actual is incompatible with the expected : %s", reflect.TypeOf(assertActual.actual).String())
+	assertActual.verifySliceType()
+
+	actual := reflect.ValueOf(assertActual.actual)
+	if actual.Len() != expected {
+		assertActual.Test.Fail()
 	}
 }
 
@@ -85,4 +81,15 @@ func find(elements reflect.Value, elementToFind interface{}) interface{} {
 		}
 	}
 	return nil
+}
+
+func (assertActual *AssertActual) verifySliceType() {
+	if reflect.TypeOf(assertActual.actual).Kind() != reflect.Slice {
+		assertActual.errorNow("type of actual is incompatible with the expected : %s", reflect.TypeOf(assertActual.actual).String())
+	}
+}
+
+func (assertActual *AssertActual) errorNow(format string, param interface{}) {
+	assertActual.Test.Errorf(format, param)
+	runtime.Goexit()
 }
