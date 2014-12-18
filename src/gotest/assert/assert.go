@@ -14,20 +14,30 @@ type AssertActual struct {
 	Test   testing.TB
 }
 
-func (assert *Assert) IsTrue(actual bool) {
-	if !actual {
-		assert.Test.Fail()
+func (assert *Assert) That(actual interface{}) *AssertActual {
+	return &AssertActual{Test: assert.Test, actual: actual}
+}
+
+func (assertActual *AssertActual) IsTrue() {
+	if !assertActual.actual.(bool) {
+		assertActual.Test.Fail()
 	}
 }
 
-func (assert *Assert) IsFalse(actual bool) {
-	if actual {
-		assert.Test.Fail()
+func (assertActual *AssertActual) IsFalse() {
+	if assertActual.actual.(bool) {
+		assertActual.Test.Fail()
 	}
 }
 
 func (assertActual *AssertActual) IsEqualTo(expected string) {
 	if assertActual.actual != expected {
+		assertActual.Test.Fail()
+	}
+}
+
+func (assertActual *AssertActual) IsNotEqualTo(expected string) {
+	if assertActual.actual == expected {
 		assertActual.Test.Fail()
 	}
 }
@@ -40,7 +50,7 @@ func (assertActual *AssertActual) Contains(expected interface{}) {
 			assertActual.Test.Fail()
 		}
 	} else {
-		assertActual.Test.Errorf("actual is incompatible with expected : %s", reflect.TypeOf(assertActual.actual).String())
+		assertActual.Test.Errorf("type of actual is incompatible with the expected : %s", reflect.TypeOf(assertActual.actual).String())
 	}
 }
 
@@ -52,14 +62,4 @@ func find(elements reflect.Value, elementToFind interface{}) interface{} {
 		}
 	}
 	return nil
-}
-
-func (assertActual *AssertActual) IsNotEqualTo(expected string) {
-	if assertActual.actual == expected {
-		assertActual.Test.Fail()
-	}
-}
-
-func (assert *Assert) That(actual interface{}) *AssertActual {
-	return &AssertActual{Test: assert.Test, actual: actual}
 }

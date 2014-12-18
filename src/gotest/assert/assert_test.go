@@ -13,7 +13,7 @@ type MockTest struct {
 func TestAssertTrue(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
-	assert.IsTrue(true)
+	assert.That(true).IsTrue()
 
 	if assert.Test.Failed() {
 		test.FailNow()
@@ -23,7 +23,7 @@ func TestAssertTrue(test *testing.T) {
 func TestAssertTrueFailed(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
-	assert.IsTrue(false)
+	assert.That(false).IsTrue()
 
 	if !assert.Test.Failed() {
 		test.FailNow()
@@ -33,13 +33,13 @@ func TestAssertTrueFailed(test *testing.T) {
 func TestAssertTrueAsUser(test *testing.T) {
 	var assert Assert = Assert{test}
 
-	assert.IsTrue(true)
+	assert.That(true).IsTrue()
 }
 
 func TestAssertFalse(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
-	assert.IsFalse(false)
+	assert.That(false).IsFalse()
 
 	if assert.Test.Failed() {
 		test.FailNow()
@@ -49,7 +49,7 @@ func TestAssertFalse(test *testing.T) {
 func TestAssertFalseFailed(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
-	assert.IsFalse(true)
+	assert.That(true).IsFalse()
 
 	if !assert.Test.Failed() {
 		test.FailNow()
@@ -59,7 +59,7 @@ func TestAssertFalseFailed(test *testing.T) {
 func TestAssertFalseAsUser(test *testing.T) {
 	var assert Assert = Assert{test}
 
-	assert.IsFalse(false)
+	assert.That(false).IsFalse()
 }
 
 func TestAssertEqual(test *testing.T) {
