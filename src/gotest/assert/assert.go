@@ -31,14 +31,14 @@ func (assertActual *AssertActual) IsFalse() {
 	}
 }
 
-func (assertActual *AssertActual) IsEqualTo(expected string) {
-	if assertActual.actual != expected {
+func (assertActual *AssertActual) IsEqualTo(expected interface{}) {
+	if !reflect.DeepEqual(assertActual.actual, expected) {
 		assertActual.Test.Errorf("%s is not equal to %s", expected, assertActual.actual)
 	}
 }
 
-func (assertActual *AssertActual) IsNotEqualTo(expected string) {
-	if assertActual.actual == expected {
+func (assertActual *AssertActual) IsNotEqualTo(expected interface{}) {
+	if reflect.DeepEqual(assertActual.actual, expected) {
 		assertActual.Test.Errorf("%s is equal to %s", expected, assertActual.actual)
 	}
 }

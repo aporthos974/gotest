@@ -52,10 +52,50 @@ func TestAssertEqual(test *testing.T) {
 	}
 }
 
+func TestAssertEqualWithInteger(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That(1).IsEqualTo(1)
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertEqualWithList(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]int{1, 2}).IsEqualTo([]int{1, 2})
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
 func TestAssertEqualFailed(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
 	assert.That("Hello").IsEqualTo("different Hello")
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertEqualFailedWithInteger(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That(1).IsEqualTo(2)
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertEquaFailedlWithList(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]int{1, 2}).IsEqualTo([]int{1, 3})
 
 	if !assert.Test.Failed() {
 		test.FailNow()
@@ -72,10 +112,30 @@ func TestAssertNotEqual(test *testing.T) {
 	}
 }
 
+func TestAssertNotEqualWithList(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]int{1, 3}).IsNotEqualTo([]int{1, 4})
+
+	if assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
 func TestAssertNotEqualFailed(test *testing.T) {
 	assert := Assert{Test: &MockTest{}}
 
 	assert.That("Hello").IsNotEqualTo("Hello")
+
+	if !assert.Test.Failed() {
+		test.FailNow()
+	}
+}
+
+func TestAssertNotEqualFailedWithList(test *testing.T) {
+	assert := Assert{Test: &MockTest{}}
+
+	assert.That([]int{1, 3}).IsNotEqualTo([]int{1, 3})
 
 	if !assert.Test.Failed() {
 		test.FailNow()
