@@ -21,25 +21,25 @@ func (assert *Assert) That(actual interface{}) *AssertActual {
 
 func (assertActual *AssertActual) IsTrue() {
 	if !assertActual.actual.(bool) {
-		assertActual.Test.Fail()
+		assertActual.Test.Error("actual is not true")
 	}
 }
 
 func (assertActual *AssertActual) IsFalse() {
 	if assertActual.actual.(bool) {
-		assertActual.Test.Fail()
+		assertActual.Test.Error("actual is not false")
 	}
 }
 
 func (assertActual *AssertActual) IsEqualTo(expected string) {
 	if assertActual.actual != expected {
-		assertActual.Test.Fail()
+		assertActual.Test.Errorf("%s is not equal to %s", expected, assertActual.actual)
 	}
 }
 
 func (assertActual *AssertActual) IsNotEqualTo(expected string) {
 	if assertActual.actual == expected {
-		assertActual.Test.Fail()
+		assertActual.Test.Errorf("%s is equal to %s", expected, assertActual.actual)
 	}
 }
 
@@ -48,7 +48,7 @@ func (assertActual *AssertActual) Contains(expected interface{}) {
 
 	actual := reflect.ValueOf(assertActual.actual)
 	if find(actual, expected) == nil {
-		assertActual.Test.Fail()
+		assertActual.Test.Errorf("actual doesn't contain %s", expected)
 	}
 }
 
@@ -57,19 +57,19 @@ func (assertActual *AssertActual) HasSize(expected interface{}) {
 
 	actual := reflect.ValueOf(assertActual.actual)
 	if actual.Len() != expected {
-		assertActual.Test.Fail()
+		assertActual.Test.Errorf("size of expected is %d", actual)
 	}
 }
 
 func (assertActual *AssertActual) IsNil() {
 	if assertActual.actual != nil {
-		assertActual.Test.Fail()
+		assertActual.Test.Error("expected isn't nil")
 	}
 }
 
 func (assertActual *AssertActual) IsNotNil() {
 	if assertActual.actual == nil {
-		assertActual.Test.Fail()
+		assertActual.Test.Error("expected is nil")
 	}
 }
 
