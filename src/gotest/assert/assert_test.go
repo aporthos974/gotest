@@ -17,7 +17,8 @@ func TestAssertTrueFailed(test *testing.T) {
 
 	assert.That(false).IsTrue()
 
-	if !assert.Test.Failed() {
+	testResult := assert.Test.(*MockTest)
+	if !testResult.Failed() || testResult.errors[0] != "Actual is not true" {
 		test.FailNow()
 	}
 }
@@ -37,7 +38,8 @@ func TestAssertFalseFailed(test *testing.T) {
 
 	assert.That(true).IsFalse()
 
-	if !assert.Test.Failed() {
+	testResult := assert.Test.(*MockTest)
+	if !testResult.Failed() || testResult.errors[0] != "Actual is not false" {
 		test.FailNow()
 	}
 }
@@ -77,7 +79,8 @@ func TestAssertEqualFailed(test *testing.T) {
 
 	assert.That("Hello").IsEqualTo("different Hello")
 
-	if !assert.Test.Failed() {
+	testResult := assert.Test.(*MockTest)
+	if !testResult.Failed() || testResult.errors[0] != "Expected : \"different Hello\"\nis not Equal to:\n\"Hello\"" {
 		test.FailNow()
 	}
 }
@@ -127,7 +130,8 @@ func TestAssertNotEqualFailed(test *testing.T) {
 
 	assert.That("Hello").IsNotEqualTo("Hello")
 
-	if !assert.Test.Failed() {
+	testResult := assert.Test.(*MockTest)
+	if !testResult.Failed() || testResult.errors[0] != "Expected : \"Hello\"\nis Equal to:\n\"Hello\"" {
 		test.FailNow()
 	}
 }

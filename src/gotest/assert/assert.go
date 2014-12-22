@@ -20,25 +20,25 @@ func (assert *Assert) That(actual interface{}) *AssertActual {
 
 func (assertActual *AssertActual) IsTrue() {
 	if !assertActual.actual.(bool) {
-		assertActual.Test.Error("actual is not true")
+		assertActual.Test.Error("Actual is not true")
 	}
 }
 
 func (assertActual *AssertActual) IsFalse() {
 	if assertActual.actual.(bool) {
-		assertActual.Test.Error("actual is not false")
+		assertActual.Test.Error("Actual is not false")
 	}
 }
 
 func (assertActual *AssertActual) IsEqualTo(expected interface{}) {
 	if !reflect.DeepEqual(assertActual.actual, expected) {
-		assertActual.Test.Errorf("%s is not equal to %s", expected, assertActual.actual)
+		assertActual.Test.Errorf("Expected : \"%s\"\nis not Equal to:\n\"%s\"", expected, assertActual.actual)
 	}
 }
 
 func (assertActual *AssertActual) IsNotEqualTo(expected interface{}) {
 	if reflect.DeepEqual(assertActual.actual, expected) {
-		assertActual.Test.Errorf("%s is equal to %s", expected, assertActual.actual)
+		assertActual.Test.Errorf("Expected : \"%s\"\nis Equal to:\n\"%s\"", expected, assertActual.actual)
 	}
 }
 
